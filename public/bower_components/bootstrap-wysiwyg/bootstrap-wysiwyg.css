@@ -1,0 +1,37 @@
+/* this CSS is not part of the widget, it is here just as an example of the demo page styling.... Don't copy this one, roll your own. One
+ * of the key things about the widget is that it allows you to do your own styling!
+ */
+
+.wysiwg-btn-toolbar {
+    background: #f3f3f3;
+    margin-left: 0px;
+    border-top: 1px solid rgb(204, 204, 204);
+    border-left: 1px solid rgb(204, 204, 204);
+    border-right: 1px solid rgb(204, 204, 204);
+}
+.wysiwg-btn-toolbar .btn-group {
+    border-right: 1px solid rgb(204, 204, 204);
+}
+.wysiwg-btn-toolbar .btn-group .btn{
+    border-radius: 0px;
+}
+#wysiwg-content-editor {
+	max-height: 250px;
+    height: 250px;
+    background-color: white;
+    border-collapse: separate;
+    border: 1px solid rgb(204, 204, 204);
+    padding: 4px;
+    box-sizing: content-box;
+    -webkit-box-shadow: rgba(0, 0, 0, 0.0745098) 0px 1px 1px 0px inset;
+    box-shadow: rgba(0, 0, 0, 0.0745098) 0px 1px 1px 0px inset;
+    overflow: scroll;
+    outline: none;
+}
+
+div[data-role="editor-toolbar"] {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}

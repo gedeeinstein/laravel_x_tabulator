@@ -1,0 +1,22 @@
+{
+  "name": "bootstrap-wysiwyg",
+  "version": "3.3.8",
+  "main": [
+	  "./bootstrap-wysiwyg.js",
+	  "./bootstrap-wysiwyg.css",
+	  "./jquery.hotkeys.js"
+  ],
+  "keywords": ["jquery", "plugins", "input", "wysiwyg", "bootstrap"],
+  "description": "bootstrap-wysiwyg",
+  "license": "https://github.com/mindmup/bootstrap-wysiwyg/",
+  "ignore": [
+    "**/*",
+  ],
+  "dependencies": {
+    "jquery": ">=1.7"
+  },
+  "authors": [{
+    "name": "Steve Athon"
+  }],
+  "homepage": "https://github.com/mindmup/bootstrap-wysiwyg/"
+}
