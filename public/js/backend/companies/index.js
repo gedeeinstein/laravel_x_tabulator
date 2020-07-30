@@ -1,9 +1,9 @@
 $(function () {
 
     // init: side menu for current page
-    $('li#menu-users').addClass('menu-open active');
-    $('li#menu-users').find('.treeview-menu').css('display', 'block');
-    $('li#menu-users').find('.treeview-menu').find('.list-users a').addClass('sub-menu-active');
+    $('li#menu-companies').addClass('menu-open active');
+    $('li#menu-companies').find('.treeview-menu').css('display', 'block');
+    $('li#menu-companies').find('.treeview-menu').find('.list-companies a').addClass('sub-menu-active');
 
     // call tabulator function and create tables
     const TRIANGLE_IMAGE_FOR_FILTER = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAAJCAYAAAA/33wPAAAAvklEQVQoFY2QMQqEMBBFv7ERa/EMXkGw11K8QbDXzuN4BHv7QO6ifUgj7v4UAdlVM8Uwf+b9YZJISnlqrfEUZVlinucnBGKaJgghbiHOyLyFKIoCbdvecpyReYvo/Ma2bajrGtbaC58kCdZ1RZ7nl/4/4d5EsO/7nzl7IUtodBexMMagaRrs+06JLMvcNWmaOv2W/C/TMAyD58dxROgSmvxFFMdxoOs6lliWBXEcuzokXRbRoJRyvqqqQvye+QDMDz1D6yuj9wAAAABJRU5ErkJggg==';
@@ -32,8 +32,19 @@ $(function () {
                '</form>';
     }; // Formatter for edit/delete
 
+
+
+    // var prefecture = new Tabulator("#example-table", {
+    //     ajaxURL:"http://www.getmydata.com/now", //ajax URL
+    //     prefecture = $('#datalist').tabulator('setData', rootUrl + '/api/admin/companies/getCompaniesTabular');
+    // });
+
+//column definition
+
     // call tabulator function and create tables
     $("#datalist").tabulator({
+
+        
         layout: "fitColumns",
         placeholder: "There is not Data",
         responsiveLayout: false,
@@ -56,9 +67,28 @@ $(function () {
         },
         columns: [
             {title: "ID", field: "id", width: 45, headerFilter: "input", sorter: "number", headerFilterPlaceholder: " "},
-            {title: "Username", field: "username", minwidth: 200, headerFilter: "input", headerFilterPlaceholder: " "},
-            {title: "Name", field: "display_name", width: 150, headerFilter: "input", headerFilterPlaceholder: " "},
-            {title: "Created At", field: "created_at", width: 150, headerFilter:"input", headerFilterPlaceholder: " "},
+            {title: "Name", field: "name", minwidth: 200, headerFilter: "input", headerFilterPlaceholder: " "},
+            {title: "Email", field: "email", width: 150, headerFilter: "input", headerFilterPlaceholder: " "},
+            {title: "Postcode", field: "postcode", width: 150, headerFilter: "input", headerFilterPlaceholder: " "},
+            {title: "Prefecture", field: "prefecture.display_name", width: 150, headerFilter: 'select',
+                editor:"autocomplete", editorParams:{
+                showListOnEmpty:true, //show all values when the list is empty,
+                freetext:true, //allow the user to set the value of the cell to a free text entry
+                allowEmpty:true, //allow empty string values
+                }
+            },
+
+            // {title:"Prefecture", field:"prefecture.name", editor:"select", headerFilter: 'select',
+            // editor:"autocomplete", headerFilterParams:{
+            //     listItemFormatter:function(value, title){
+            //         console.log(value, title);
+            //         return value
+            //     }
+            // }},
+
+            
+
+            {title: "Address", field: "street_address", width: 150, headerFilter: "input", headerFilterPlaceholder: " "},
             {title: "Updated At", field: "updated_at", width: 150, headerFilter: "input", headerFilterPlaceholder: " "},
             {title: "Action", field: "action", align: "center", headerFilter: false, width: 100, formatter: formatActionField, headerFilterPlaceholder: " ", headerSort: false, frozen: true}
         ],
@@ -87,7 +117,7 @@ $(function () {
         }
     });
 
-    $('#datalist').tabulator('setData', rootUrl + '/api/admin/users/getUsersTabular');
+    $('#datalist').tabulator('setData', rootUrl + '/api/admin/companies/getCompaniesTabular');
     $('#datalist').tabulator('setLocale', 'ja-jp');
 
     $(window).resize(function(){

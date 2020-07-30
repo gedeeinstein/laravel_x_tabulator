@@ -39,6 +39,7 @@ Route::GET('logout', 'Auth\LoginController@logout')->name('logout');
  */
 
 // Admin backend routes - accessible after successful login
+// Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:user']], function () {
 Route::GROUP(['middleware' => ['auth:user']], function() {
 
     // Logout
@@ -51,4 +52,9 @@ Route::GROUP(['middleware' => ['auth:user']], function() {
     Route::GET('/admin/edit/{id}', 'Backend\UserController@edit')->name('admin.edit');
     Route::POST('/admin/update', 'Backend\UserController@update')->name('admin.update');
     Route::GET('/admin/delete', 'Backend\UserController@delete')->name('admin.delete');
+
+    // Admin (handles companies account)
+
+    Route::GET('/companies', 'Backend\CompananiesController@index')->name('companies');
+
 });

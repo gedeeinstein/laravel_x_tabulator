@@ -25,4 +25,8 @@ Route::GROUP(['middleware' => ['auth:user']], function() {
 
     // Get User List
     Route::get('/admin/users/getUsersTabular', 'Api\ApiUsersController@getUsersTabular');
+    
+    // Get Companies List
+    Route::get('/admin/companies/getCompaniesTabular', 'Api\ApiCompaniesController@getCompaniesTabular');
+    Route::get('/admin/companies/getPrefectureTabular', 'Api\ApiCompaniesController@getPrefectureTabular');
 });
