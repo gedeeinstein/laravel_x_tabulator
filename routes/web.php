@@ -54,13 +54,13 @@ Route::GROUP(['middleware' => ['auth:user']], function() {
     Route::GET('/admin/delete', 'Backend\UserController@delete')->name('admin.delete');
 
     // Admin (handles companies account)
-
-    Route::GET('/companies', 'Backend\CompananiesController@index')->name('companies');
-    Route::GET('/companies/add', 'Backend\CompananiesController@add')->name('companies.add');
-    Route::GET('/companies/create', 'Backend\CompananiesController@create')->name('companies.create');
-    Route::GET('/companies/edit/{id}', 'Backend\CompananiesController@edit')->name('companies.edit');
-    Route::GET('/companies/update', 'Backend\CompananiesController@edit')->name('companies.update');
-    Route::GET('/companies/delete', 'Backend\CompananiesController@edit')->name('companies.delete');
+    Route::GET('/companies', 'Backend\CompaniesController@index')->name('companies');
+    Route::GET('/companies/add', 'Backend\CompaniesController@add')->name('companies.add');
+    Route::GET('/companies/create', 'Backend\CompaniesController@create')->name('companies.create');
+    Route::GET('/companies/edit/{id}', 'Backend\CompaniesController@edit')->name('companies.edit');
+    Route::GET('/companies/update', 'Backend\CompaniesController@edit')->name('companies.update');
+    Route::GET('/companies/delete', 'Backend\CompaniesController@edit')->name('companies.delete');
+    Route::get('/companies/{postcode}', 'Backend\CompaniesController@getPostcode')->name('companies.postcode');
     // Route::resource('/companies', 'Backend\CompananiesController');
 
 });

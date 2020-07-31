@@ -77,6 +77,10 @@
                     "regex": "none",
                     "alertText": "* Invalid credit card number"
                 },
+                "images": {
+                    "regex": "none",
+                    "alertText": "* Max image resolution is 1280px x 720px. Max. Size 5 MB"
+                },
                 "phone": {
                     // credit: jquery.h5validate.js / orefalo
                     "regex": /^([\+][0-9]{1,3}([ \.\-])?)?([\(][0-9]{1,6}[\)])?([0-9 \.\-]{1,32})(([A-Za-z \:]{1,11})?[0-9]{1,4}?)$/,
@@ -195,7 +199,12 @@
                     "alertText2": "Expected Format: ",
                     "alertText3": "mm/dd/yyyy hh:mm:ss AM|PM or ",
                     "alertText4": "yyyy-mm-dd hh:mm:ss AM|PM"
-	            }
+                },
+                "checkFileType": {
+                    "regex": "none",
+                    // "alertText": "* Wrong file Type."                    
+                    "alertText": "* Max image resolution is 1280px x 720px. Max. Size 5 MB"
+                },
             };
 
         }

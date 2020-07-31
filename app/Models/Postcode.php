@@ -21,4 +21,11 @@ class Postcode extends \App\Models\Base\Postcode
 		'indicator_5',
 		'indicator_6'
 	];
+
+	public function prefecture()
+	{
+		return $this->belongsTo('App\Models\Prefecture', 'prefecture', 'display_name');
+	}
+
+	
 }
