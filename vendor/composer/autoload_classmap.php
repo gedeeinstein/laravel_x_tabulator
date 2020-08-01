@@ -12,7 +12,7 @@ return array(
     'App\\Http\\Controllers\\Api\\ApiCompaniesController' => $baseDir . '/app/Http/Controllers/Api/ApiCompaniesController.php',
     'App\\Http\\Controllers\\Api\\ApiUsersController' => $baseDir . '/app/Http/Controllers/Api/ApiUsersController.php',
     'App\\Http\\Controllers\\Auth\\LoginController' => $baseDir . '/app/Http/Controllers/Auth/LoginController.php',
-    'App\\Http\\Controllers\\Backend\\CompananiesController' => $baseDir . '/app/Http/Controllers/Backend/CompananiesController.php',
+    'App\\Http\\Controllers\\Backend\\CompaniesController' => $baseDir . '/app/Http/Controllers/Backend/CompaniesController.php',
     'App\\Http\\Controllers\\Backend\\UserController' => $baseDir . '/app/Http/Controllers/Backend/UserController.php',
     'App\\Http\\Controllers\\Controller' => $baseDir . '/app/Http/Controllers/Controller.php',
     'App\\Http\\Kernel' => $baseDir . '/app/Http/Kernel.php',

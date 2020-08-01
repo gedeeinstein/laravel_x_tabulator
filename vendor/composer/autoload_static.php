@@ -551,7 +551,7 @@ class ComposerStaticInita42f31be497b2743ff3a9a00a6a7ecd7
         'App\\Http\\Controllers\\Api\\ApiCompaniesController' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/ApiCompaniesController.php',
         'App\\Http\\Controllers\\Api\\ApiUsersController' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/ApiUsersController.php',
         'App\\Http\\Controllers\\Auth\\LoginController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/LoginController.php',
-        'App\\Http\\Controllers\\Backend\\CompananiesController' => __DIR__ . '/../..' . '/app/Http/Controllers/Backend/CompananiesController.php',
+        'App\\Http\\Controllers\\Backend\\CompaniesController' => __DIR__ . '/../..' . '/app/Http/Controllers/Backend/CompaniesController.php',
         'App\\Http\\Controllers\\Backend\\UserController' => __DIR__ . '/../..' . '/app/Http/Controllers/Backend/UserController.php',
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
         'App\\Http\\Kernel' => __DIR__ . '/../..' . '/app/Http/Kernel.php',

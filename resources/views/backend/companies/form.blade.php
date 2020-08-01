@@ -27,10 +27,10 @@
                     </div>
                     @endif
 
-                    @if(isset($companies))
+                    @if($companies->page_type == 'create' )
                         {{ Form::open(array('route' => $companies->form_action, 'method' => 'POST', 'files' => true, 'id' => 'company-form')) }}
                     @else
-                        {{ Form::model($companies, ['route' => [$companies->form_action, $companies->id], 'method' => 'patch', 'files' => true, 'id' => 'company-form']) }}
+                        {{ Form::model($companies, ['route' => [$companies->form_action, $companies->id], 'method' => 'PATCH', 'files' => true, 'id' => 'company-form']) }}
                     @endif
 
                     {{ Form::hidden('id', $companies->id, ['id' => 'companies_id']) }}
@@ -140,7 +140,7 @@
                             <strong class="field-title">URL</strong>
                         </div>
                         <div class="col-xs-12 col-sm-12 col-md-9 col-lg-10 col-content">
-                            {{ Form::text('url', $companies->url, array('placeholder' => ' ', 'class' => 'form-control validate[custom[url], maxSize[100]]', 'data-prompt-position' => 'bottomLeft:0,11')) }}
+                            {{ Form::text('url', $companies->url, array('placeholder' => ' ', 'class' => 'form-control validate[custom[url], maxSize[255]]', 'data-prompt-position' => 'bottomLeft:0,11')) }}
                         </div>
                     </div>
                     <div id="form-license_number" class="form-group">
@@ -157,8 +157,9 @@
                             <strong class="field-title">Image</strong>
                         </div>
                         <div class="col-xs-12 col-sm-12 col-md-9 col-lg-10 col-content">
-                            {!! Form::file('image', ['placeholder' => ' ', 'class' => 'validate[required, checkFileType[jpg|jpeg|gif|JPG|png|PNG]]', 'data-prompt-position' => 'bottomRight:0,11', 'id' => 'image']) !!}
+                            {!! Form::file('image', ['class' => 'validate[required, checkFileType[jpg|jpeg|gif|JPG|png|PNG]]', 'data-prompt-position' => 'bottomRight:0,11', 'id' => 'image']) !!}
                             {{-- <div class="file_error "></div> --}}
+                            <div class="file_error localformError parentFormcompany-form" style="opacity: 0.87; position: absolute; top: 36px; left: 15px; right: initial; margin-top: 0px;"><div class="formErrorContent"></div></div>
                         </div>
                     </div>
                     <div id="form-images_preview" class="no-border">
@@ -166,16 +167,16 @@
                             <strong class="field-title"> </strong>
                         </div>
                         <div class="col-xs-12 col-sm-12 col-md-9 col-lg-10 col-content">
-                            <div class="file_error "></div>
-                            <div class="company-image no-border"  style="padding: 4% 0;">
-                                <img style="text-align: center"  src="https://upload.wikimedia.org/wikipedia/commons/6/6c/No_image_3x4.svg" />
+                            {{-- <div class="file_error "></div> --}}
+                            <div class="company-image no-border" style="padding: 4% 0;">
+                            <img id="company-image" style="text-align: center" src= '{{ url('/img/no-image/no-image.jpg') }}' />
                             </div>
                         </div>
                     </div>
 
                     <div id="form-button" class="form-group no-border">
                         <div class="col-xs-12 col-sm-12 col-md-12 text-center">
-                            <button type="submit" name="submit" id="send" class="btn btn-primary">Submit</button>
+                            <button type="submit" id="send" class="btn btn-primary">Submit</button>
                         </div>
                     </div>
                     {{ Form::close() }}

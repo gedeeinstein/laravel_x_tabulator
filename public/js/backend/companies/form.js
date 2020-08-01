@@ -17,78 +17,42 @@ $(function () {
     
 });
 
-
-// function validate() {
-// 	$("#image").html("");
-// 	var file  = $('#image')[0].files[0];
-//     var file_size = $('#image')[0].files[0].size;
-//     var height = $('#image')[0].files[0].height;
-    
-// 	if(file_size>5000000) {
-// 		$(".file_error").html("File size is greater than 5MB");
-// 		return false;
-// 	} 
-// 	return true;
-// }
-
-
 $('#image').on('change', function(evt) {
-
-    // validate();
     var selectedImage = evt.currentTarget.files[0];
     var imageWrapper = document.querySelector('.company-image');
     var previewImg = document.createElement('img');
     imageWrapper.innerHTML = '';
-    
+
     var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.jpg|.jpeg|.gif|.png|.bmp)$/;
+
     if (regex.test(selectedImage.name.toLowerCase())) {
         if (typeof(FileReader) != 'undefined') {
-        var reader = new FileReader();
-        reader.onload = function(e) {
-            previewImg.id = 'new-selected-image';
-            previewImg.src = e.target.result;
-            imageWrapper.appendChild(previewImg);
+            var reader = new FileReader();
 
-            var image = new Image();
-            image.src = e.target.result;
-            image.onload = function(){
-                var height = this.height;
-                var width = this.width;
-                var size = this.size;
+            reader.onload = function(e) {
+                previewImg.id = 'new-selected-image';
+                previewImg.src = e.target.result;
+                imageWrapper.appendChild(previewImg);
 
-                // if((height >= 1280 || height <= 1100) && (width >= 750 || width <= 800)){
-                //     $(".file_error").html("Image maximum resolution is 1280px x 720px. And max size 5MB ");
-                //     return false;
-                // }
-                // if(Math.round(size / (2048*2048)) > 5){
-                //     $(".file_error").html("Your images more than 5MB");
-                //     return false;
-                    
-                // }
-                // else{
-                //     $(".file_error").html('')
-                // }
-                // return true;
+                var image = new Image();
+                image.src = previewImg.src;
+                image.onload = function(img){
+                    var width = img.width,
+                        height = this.height;
+                    if( width > 1280 || height > 720 || selectedImage.size > 5000000){
+                        $('.file_error').addClass('formError');
+                        $(".formErrorContent").html("Image dimension more than 1280px x 720px. And max file size 5MB");
+                    }
+                }
             }
-        }
-            //
-        reader.readAsDataURL(selectedImage);
-
-        if(selectedImage.size > 5000000){
-            $('.file_error').addClass('formError formErrorContent');
-            $(".file_error").html("Image maximum resolution is 1280px x 720px. And max size 5MB ");
-            return false;
-
-        }
-
+            reader.readAsDataURL(selectedImage);
         } else {
-        
-        console.log('browser support issue');
+            console.log('browser support issue');
         }
-    } else {
-        
-        $(this).prop('value', null);
-        console.log('please select and image file');
+    } 
+    else {
+        // $(this).prop('value', null);
+        // console.log('Please select and image file');
     }
 
 });   
@@ -97,17 +61,15 @@ $('#search').click(function (e){
     e.preventDefault();
 
     var postcode = $('#postcode').val();
-    var selectedPrefecture = $('#prefecture_id').find('option:selected');
-
 
     if(postcode === null || postcode == '' || postcode === 'undefined' ){
         Swal.fire({
-            position: 'top-end',
+            position: 'center',
             icon: 'error',
-            title: 'No Data Found',
+            title: 'Please Input Postcode',
             text: 'Make sure the data given is valid',
             showConfirmButton: false,
-            timer: 2500
+            timer: 2000
           });
           return false;
     }
@@ -118,22 +80,35 @@ $('#search').click(function (e){
         url: rootUrl + '/companies/'+ postcode,
         dataType: 'json',
         success: function(data){
+            // console.info(data);
 
-            console.info(data);
+            if(data != ''){
+                $("#local").val(data[0]['local']);
+                $("#city").val(data[0]['city']);
+                $('#prefecture_id option[value="'+data[0]['prefecture']['id']+'"]').prop('selected', true);
 
-            $("#local").val(data[0]['local']);
-            $("#city").val(data[0]['city']);
-            $('#prefecture_id option[value="'+data[0]['prefecture']['id']+'"]').prop('selected', true);
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: 'Data has been filled',
+                    text: 'Postcode is valid and related field has been filled',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            }else{
+                // console.log(data);
+                Swal.fire({
+                    position: 'center',
+                    icon: 'error',
+                    title: 'Postcode Not Found',
+                    text: 'Please input a valid postcode',
+                    
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            }
 
 
-            Swal.fire({
-                position: 'center',
-                icon: 'success',
-                title: 'Data has been filled',
-                text: 'Postcode is valid and related field has been filled',
-                showConfirmButton: false,
-                timer: 1500
-              });
         },
         error: function(data){
             console.log(data);

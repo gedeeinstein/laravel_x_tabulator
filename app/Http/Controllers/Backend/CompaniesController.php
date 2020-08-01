@@ -41,30 +41,76 @@ class CompaniesController extends Controller
 
     public function create(Request $request)
     {
-        return $request->all();
+
+        $this->validate($request, [
+            'name'          => 'sometimes|required|string|max:255',
+            'email'         => 'sometimes|required|email|max:100',
+            'prefecture_id' => 'required|integer',
+            'postcode'      => 'required|string|max:9',
+            'city'          => 'nullable|string|max:100',
+            'local'         => 'nullable|string|max:100',
+            'street_address' => 'nullable|string|max:255',
+            'business_hour'  => 'nullable|string|max:100',
+            'regular_holiday' => 'nullable|string|max:100',
+            'image'           => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:5120|dimensions:max_width=1280,max_height=720',
+            'fax'             => 'nullable|string|max:100',
+            'url'             => 'nullable|string|max:255',
+            'license_number'  => 'nullable|string',
+        ]);
+
+        dd($request->file('image'));
+
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $name = 'image_'.str_slug($request->title).'.'.$image->getClientOriginalExtension();
+            $destinationPath = public_path('/uploads/files');
+            $imagePath = $destinationPath. "/".  $name;
+            $image->move($destinationPath, $name);
+            $article->image = $name;
+          }
+
+        // $dataCompany = $request->all();
+        $dataCompany = new Company();
+
+        return $request;
+
+        // $this->validator($dataCompany, 'create')->validate();
+
+        // return $dataCompany;
     }
 
     public function getPostcode($postcode)
     {
-        
         try {
-            
-            // $query = DB::select(" 
-            // SELECT 
-            // postcodes.id, 
-            // prefectures.id as prefectures_id, 
-            // postcodes.prefecture, 
-            // prefectures.display_name, prefectures.name, postcodes.postcode, postcodes.city, postcodes.local FROM prefectures, postcodes WHERE postcodes.postcode LIKE '%$postcode%' GROUP BY postcodes.prefecture 
-            // ");
-            $postcode = Postcode::with('prefecture')->where('postcode', $postcode)->get();
-
-            // return response()->json($query);
-            return response()->json($postcode);
-            
+            $postcodes = Postcode::with('prefecture')->where('postcode', $postcode)->get();
+            if($postcodes != ''){
+                return response()->json($postcodes);
+            }
+            else{
+                return null;
+            }
         } catch (Exception $e) {
-            
-            // $postcode = Postcode::where('postcode','like', '%'. $postcode . '%')->get();
+            return $e;
         }
 
+    }
+
+
+    protected function validator(array $data, $type) {
+        return Validator::make($data, [
+                'name' => 'sometimes|required|string|max:255|unique:companies',
+                'email' => 'sometimes|required|email|max:100|unique:companies',
+                'prefecture_id' => 'required|integer',
+                'postcode' => 'required|string|max:9',
+                'city' => 'nullable|string|max:100',
+                'local' => 'nullable|string|max:100',
+                'street_address' => 'nullable|string|max:255',
+                'business_hour' => 'nullable|string|max:100',
+                'regular_holiday' => 'nullable|string|max:100',
+                'image' => 'required|mimes:jpeg,png,jpg,gif,svg|max:5120',
+                'fax' => 'nullable|string|max:100',
+                'url' => 'nullable|string|max:255',
+                'license_number' => 'nullable|string',
+        ]);
     }
 }
