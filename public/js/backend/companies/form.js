@@ -6,7 +6,21 @@ $(function () {
 
     $('#company-form').validationEngine('attach', {
         promptPosition : 'topLeft',
-        scroll: false
+        scroll: true,
+        'custom_error_messages' : {
+            '#image' : {
+                'required': {
+                    'message': "* Image dimension should be less than 1280px x 720px. (Maks. size 5 MB)"
+                }
+
+            }
+        },
+        
+        },
+        {
+            onValidationComplete: function(form, status){
+              alert("The form status is: " +status+", it will never submit");
+        }
     });
 
     // init: show tooltip on hover
@@ -33,17 +47,18 @@ $('#image').on('change', function(evt) {
                 previewImg.id = 'new-selected-image';
                 previewImg.src = e.target.result;
                 imageWrapper.appendChild(previewImg);
-
-                var image = new Image();
-                image.src = previewImg.src;
-                image.onload = function(img){
-                    var width = img.width,
-                        height = this.height;
-                    if( width > 1280 || height > 720 || selectedImage.size > 5000000){
-                        $('.file_error').addClass('formError');
-                        $(".formErrorContent").html("Image dimension more than 1280px x 720px. And max file size 5MB");
-                    }
-                }
+                // var image = new Image();
+                // image.src = previewImg.src;
+                // image.onload = function(img){
+                //     var width = img.width,
+                //         height = this.height;
+                //     if( width > 1280 || height > 720 || selectedImage.size > 5000000){
+                        
+                //         // $('.file_error').addClass('formError');
+                //         // $(".formErrorContent").html("Image dimension more than 1280px x 720px or image size exceed 5 MB");
+                //         return false;
+                //     }
+                // }
             }
             reader.readAsDataURL(selectedImage);
         } else {
@@ -51,8 +66,8 @@ $('#image').on('change', function(evt) {
         }
     } 
     else {
-        // $(this).prop('value', null);
-        // console.log('Please select and image file');
+        $(this).prop('value', null);
+        console.log('Please select and image file');
     }
 
 });   
@@ -122,31 +137,13 @@ $('#search').click(function (e){
             });
         }
 
-    })
-
-    // $.get(rootUrl + '/companies/'+ postcode, function(data,status){
-
-    //     console.log(data,status);
-    //     if(status === 'success'){
-
-    //         // var  obj = jQuery.parseJSON(data);
-    //         $("#local").val(data.local);
-    //         $("#city").val(data.city);
-
-    //         Swal.fire({
-    //             position: 'center',
-    //             icon: 'success',
-    //             title: 'Data has been filled',
-    //             text: 'Postcode is valid and related field has been filled',
-    //             showConfirmButton: false,
-    //             timer: 2500
-    //           });
-    //     }else{
-
-    //     }
-
-    // })
-    
+    });
 
 
 })
+
+// $('#company-form').on('click', function(e){
+//     if(!e.preventDefault()){
+//         alert('kirim data')
+//     }
+// });

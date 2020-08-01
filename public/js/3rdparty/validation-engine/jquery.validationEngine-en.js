@@ -202,8 +202,8 @@
                 },
                 "checkFileType": {
                     "regex": "none",
-                    // "alertText": "* Wrong file Type."                    
-                    "alertText": "* Max image resolution is 1280px x 720px. Max. Size 5 MB"
+                    "alertText": "* Wrong file Type."                    
+                    // "alertText": "* Max image resolution is 1280px x 720px. Max. Size 5 MB"
                 },
             };
 

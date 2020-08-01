@@ -41,7 +41,7 @@ class CompaniesController extends Controller
 
     public function create(Request $request)
     {
-
+        // $validator = Validator::make($request->all(),[
         $this->validate($request, [
             'name'          => 'sometimes|required|string|max:255',
             'email'         => 'sometimes|required|email|max:100',
@@ -58,7 +58,17 @@ class CompaniesController extends Controller
             'license_number'  => 'nullable|string',
         ]);
 
-        dd($request->file('image'));
+        $id_img = Company::max('id');
+
+        if($id_img > 1){
+            $id_img +1;
+        }else{
+            $id_img = 1 ;
+        }
+
+        
+        dd($request->all());
+        return $request;
 
         if ($request->hasFile('image')) {
             $image = $request->file('image');
