@@ -58,8 +58,8 @@ Route::GROUP(['middleware' => ['auth:user']], function() {
     Route::GET('/companies/add', 'Backend\CompaniesController@add')->name('companies.add');
     Route::POST('/companies/create', 'Backend\CompaniesController@create')->name('companies.create');
     Route::GET('/companies/edit/{id}', 'Backend\CompaniesController@edit')->name('companies.edit');
-    Route::PATCH('/companies/update', 'Backend\CompaniesController@edit')->name('companies.update');
-    Route::POST('/companies/delete', 'Backend\CompaniesController@edit')->name('companies.delete');
+    Route::PATCH('/companies/update/{id}', 'Backend\CompaniesController@update')->name('companies.update');
+    Route::DELETE('/companies/delete/{id}', 'Backend\CompaniesController@delete')->name('companies.delete');
     Route::get('/companies/{postcode}', 'Backend\CompaniesController@getPostcode')->name('companies.postcode');
     // Route::resource('/companies', 'Backend\CompananiesController');
 

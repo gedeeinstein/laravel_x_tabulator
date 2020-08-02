@@ -31,7 +31,7 @@
                         {{ Form::open(array('route' => $companies->form_action, 'method' => 'POST', 'files' => true, 'id' => 'company-form')) }}
                     @endif
                     @if($companies->page_type == 'edit' )
-                        {{ Form::model($companies, ['route' => [$companies->form_action, $companies->id], 'method' => 'PATCH', 'files' => true, 'id' => 'company-form']) }}
+                        {!! Form::model($companies, ['route' => [$companies->form_action,$companies->id], 'method' => 'PATCH', 'files' => true, 'id' => 'company-form']) !!}
                         {{ Form::hidden('id', $companies->id, ['id' => 'companies_id']) }}
                     @endif
                     <div id="form-name" class="form-group">
@@ -157,7 +157,12 @@
                             <strong class="field-title">Image</strong>
                         </div>
                         <div class="col-xs-12 col-sm-12 col-md-9 col-lg-10 col-content">
-                            {!! Form::file('image', ['class' => 'validate[required]', 'data-prompt-position' => 'bottomRight:0,11', 'id' => 'image']) !!}
+                            @if($companies->page_type == 'create' )
+                            {!! Form::file('image', ['class' => 'form-control no-border validate[required]', 'data-prompt-position' => 'bottomRight:0,11', 'id' => 'image']) !!}
+                            @endif
+                            @if($companies->page_type == 'edit' )
+                                {!! Form::file('image', ['class' => 'form-control no-border', 'data-prompt-position' => 'bottomRight:0,11', 'id' => 'image']) !!}
+                            @endif
                         </div>
                     </div>
                     <div id="form-images_preview" class="no-border">
@@ -171,7 +176,7 @@
                                 <img id="company-image" style="text-align: center" src= '{{ url('/img/no-image/no-image.jpg') }}' />
                                 @endif
                                 @if($companies->page_type == 'edit' )
-                                    <img id="company-image" style="text-align: center" src= '{{ url('/img/no-image/no-image.jpg') }}' />
+                                    <img id="company-image" style="text-align: center" src= '{{ url('/uploads/files', $companies->image) }}' />
                                 @endif
                             </div>
                         </div>
@@ -195,7 +200,7 @@
 <!-- /.content -->
 @endsection
 
-@section('title', 'Add New Company | ' . env('APP_NAME',''))
+@section('title', $companies->page_title. ' | ' . env('APP_NAME',''))
 
 @section('body-class', 'custom-select')
 
