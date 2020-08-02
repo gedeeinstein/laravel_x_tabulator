@@ -113,7 +113,7 @@
                                 <span>Companies</span>
                             </a>
                             <ul class="treeview-menu">
-                                <li class="add-companies"><a href="{{ route('companies.add')}}"><i class="fa fa-circle-o"></i> Add / Edit</a></li>
+                                <li class="edit-companies"><a href="{{ route('companies.add')}}"><i class="fa fa-circle-o"></i> Add / Edit</a></li>
                             <li class="list-companies"><a href="{{ route('companies') }}"><i class="fa fa-circle-o"></i> List</a></li>
                             </ul>
                         </li>

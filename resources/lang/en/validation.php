@@ -103,6 +103,9 @@ return [
         'attribute-name' => [
             'rule-name' => 'custom-message',
         ],
+        'max_width' => [
+            'rule-name' => 'custom-message',
+        ],
     ],
 
     /*

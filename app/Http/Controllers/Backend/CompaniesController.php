@@ -8,8 +8,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
-use App\Models\User;
 use App\Models\Prefecture;
 use App\Models\Company;
 use App\Models\Postcode;
@@ -39,54 +40,84 @@ class CompaniesController extends Controller
         ]);
     }
 
+    // public static function id_img()
+    // {   
+    //     $id = Company::max('id');
+
+    //     if($id < 1 || $id === null){
+    //         $id_img = 1 ;
+    //     }else{
+    //         $id_img = $id + 1;
+    //     }
+    //     return $id_img;
+    // }
+
     public function create(Request $request)
     {
-        // $validator = Validator::make($request->all(),[
-        $this->validate($request, [
-            'name'          => 'sometimes|required|string|max:255',
-            'email'         => 'sometimes|required|email|max:100',
-            'prefecture_id' => 'required|integer',
-            'postcode'      => 'required|string|max:9',
-            'city'          => 'nullable|string|max:100',
-            'local'         => 'nullable|string|max:100',
-            'street_address' => 'nullable|string|max:255',
-            'business_hour'  => 'nullable|string|max:100',
-            'regular_holiday' => 'nullable|string|max:100',
-            'image'           => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:5120|dimensions:max_width=1280,max_height=720',
-            'fax'             => 'nullable|string|max:100',
-            'url'             => 'nullable|string|max:255',
-            'license_number'  => 'nullable|string',
-        ]);
+        // Validate input, indicate this is 'create' function
+        $this->validator($request->all(), 'create')->validate();
+        // $this->validate($request, [
+        //     'name'          => 'sometimes|required|string|max:255',
+        //     'email'         => 'sometimes|required|email|max:100',
+        //     'prefecture_id' => 'required|integer',
+        //     'postcode'      => 'required|string|max:9',
+        //     'city'          => 'nullable|string|max:100',
+        //     'local'         => 'nullable|string|max:100',
+        //     'street_address' => 'nullable|string|max:255',
+        //     'business_hour'  => 'nullable|string|max:100',
+        //     'regular_holiday' => 'nullable|string|max:100',
+        //     'image'           => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:5120|dimensions:max_width=1280,max_height=720',
+        //     'fax'             => 'nullable|string|max:100',
+        //     'url'             => 'nullable|string|max:255',
+        //     'license_number'  => 'nullable|string',
+        // ]);
 
-        $id_img = Company::max('id');
-
-        if($id_img > 1){
-            $id_img +1;
-        }else{
-            $id_img = 1 ;
-        }
-
+        $company = new Company();
         
-        dd($request->all());
-        return $request;
 
-        if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $name = 'image_'.str_slug($request->title).'.'.$image->getClientOriginalExtension();
-            $destinationPath = public_path('/uploads/files');
-            $imagePath = $destinationPath. "/".  $name;
-            $image->move($destinationPath, $name);
-            $article->image = $name;
-          }
+        try {
+            $img_path = public_path('/uploads/files');
 
-        // $dataCompany = $request->all();
-        $dataCompany = new Company();
+            if (!file_exists($img_path)) {
+                mkdir($img_path, 0755, true);
+            }
+            $company->name = $request->get('name');
+            $company->email = $request->get('email');
+            $company->prefecture_id = $request->get('prefecture_id');
+            $company->postcode = $request->get('postcode');
+            $company->city = $request->get('city');
+            $company->local = $request->get('local');
+            $company->street_address = $request->get('street_address');
+            $company->business_hour = $request->get('business_hour');
+            $company->regular_holiday = $request->get('regular_holiday');
+            $company->image = "";
+            $company->fax = $request->get('fax');
+            $company->url = $request->get('url');
+            $company->license_number = $request->get('license_number');
 
-        return $request;
+            $company->save();
 
-        // $this->validator($dataCompany, 'create')->validate();
-
-        // return $dataCompany;
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $filename = 'image_'.$company->id.'.'.$image->getClientOriginalExtension();
+                $imagePath = $img_path. "/".  $filename;
+                $image->move($img_path, $filename);
+                $image = $filename;
+                // $dataCompany['image'] = $image;
+                // $company->image = $image;
+            }
+            $company->image = $image;
+            //save the image file name after other fields saved and id can be retreived, so if there is deleted data if using method img_id() file name will not match company_id
+            $company->save();
+                
+                if($company){
+                    return redirect()->route($this->getRoute())->with('success', Config::get('const.SUCCESS_CREATE_MESSAGE'));
+                }else{
+                    return redirect()->route($this->getRoute())->with('error', Config::get('const.FAILED_CREATE_MESSAGE'));
+                }            
+        } catch (\Exception $e) {
+            return print($e);
+        }
     }
 
     public function getPostcode($postcode)
@@ -108,19 +139,19 @@ class CompaniesController extends Controller
 
     protected function validator(array $data, $type) {
         return Validator::make($data, [
-                'name' => 'sometimes|required|string|max:255|unique:companies',
-                'email' => 'sometimes|required|email|max:100|unique:companies',
-                'prefecture_id' => 'required|integer',
-                'postcode' => 'required|string|max:9',
-                'city' => 'nullable|string|max:100',
-                'local' => 'nullable|string|max:100',
-                'street_address' => 'nullable|string|max:255',
-                'business_hour' => 'nullable|string|max:100',
-                'regular_holiday' => 'nullable|string|max:100',
-                'image' => 'required|mimes:jpeg,png,jpg,gif,svg|max:5120',
-                'fax' => 'nullable|string|max:100',
-                'url' => 'nullable|string|max:255',
-                'license_number' => 'nullable|string',
+            'name'          => 'required|string|max:255',
+            'email'         => 'required|email|max:100',
+            'prefecture_id' => 'required',
+            'postcode'      => 'required|string|max:9',
+            'city'          => 'nullable|string|max:100',
+            'local'         => 'nullable|string|max:100',
+            'street_address' => 'nullable|string|max:255',
+            'business_hour'  => 'nullable|string|max:100',
+            'regular_holiday' => 'nullable|string|max:100',
+            'image'           => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:5120|dimensions:max_width=1280,max_height=720',
+            'fax'             => 'nullable|string|max:100',
+            'url'             => 'nullable|string|max:255',
+            'license_number'  => 'nullable|string',
         ]);
     }
 }

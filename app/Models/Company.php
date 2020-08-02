@@ -4,6 +4,10 @@ namespace App\Models;
 
 class Company extends \App\Models\Base\Company
 {
+	protected $casts = [
+		'prefecture_id' => 'int'
+	];
+
 	protected $fillable = [
 		'name',
 		'email',
@@ -18,6 +22,7 @@ class Company extends \App\Models\Base\Company
 		'image',
 		'fax',
 		'url',
-		'license_number'
+		'license_number',
+		'image'
 	];
 }

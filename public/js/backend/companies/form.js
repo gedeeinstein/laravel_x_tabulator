@@ -1,28 +1,71 @@
-$(function () {
+$(function (e) {
     // init: side menu for current page
     $('li#menu-companies').addClass('menu-open active');
     $('li#menu-companies').find('.treeview-menu').css('display', 'block');
     $('li#menu-companies').find('.treeview-menu').find('.edit-companies a').addClass('sub-menu-active');
 
-    $('#company-form').validationEngine('attach', {
+    $('#company-form').validationEngine('attach', 
+    {
         promptPosition : 'topLeft',
         scroll: true,
-        'custom_error_messages' : {
+        'custom_error_messages' : 
+        {
             '#image' : {
                 'required': {
-                    'message': "* Image dimension should be less than 1280px x 720px. (Maks. size 5 MB)"
+                    'message': "* Upload image (Recommeded file size 1280px x 720px. Maks. size 5 MB)"
                 }
-
             }
-        },
-        
-        },
-        {
-            onValidationComplete: function(form, status){
-              alert("The form status is: " +status+", it will never submit");
         }
-    });
+        // ,
+        // ajaxFormValidation: true,
+        // onAjaxFormComplete: ajaxValidationCallback,
+        // onValidationComplete: ajaxValidationCallback,
+        // onBeforeAjaxFormValidation: beforeCall,
+       
+    }
+    );
+    //xx
+        // function beforeCall(form, options){
+        // if (console) 
+        //     console.log("Right before the AJAX form validation call");
+        //     return true;
+        // }
 
+        // //// Called once the server replies to the ajax form validation request
+        // function ajaxValidationCallback(status, form, json, options){
+        //     //if (console) 
+        //     console.log(status);
+        //     if (status === true) {
+        //     //check if all required field is valid
+        //     form.validationEngine('detach');
+            
+        //     //trying to send the data using AJAX        
+        //     // alert('kirim data')
+        //     // e.preventDefault();
+        //     var _data = $('#company-form').serialize(),
+        //         company_data = new FormData($('#company-form')[0]);
+        //         // img = $('#image')[0].files[0];
+
+        //         // company_data.append('image', img);
+            
+
+        //     $.ajax({
+        //         type: 'POST',
+        //         url: rootUrl+'/companies/create',
+        //         dataType: "JSON",
+        //         data: $('#company-form').serialize(),
+        //         success: function(response){
+        //             console.log(response);
+        //             alert('data saved');
+
+        //         },
+        //         error: function(response){
+        //             console.log(response);
+        //         }
+        //     })
+        //     }
+        // }
+    //
     // init: show tooltip on hover
     $('[data-toggle="tooltip"]').tooltip({
         container: 'body'

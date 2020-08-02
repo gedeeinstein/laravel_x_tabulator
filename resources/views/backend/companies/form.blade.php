@@ -29,11 +29,11 @@
 
                     @if($companies->page_type == 'create' )
                         {{ Form::open(array('route' => $companies->form_action, 'method' => 'POST', 'files' => true, 'id' => 'company-form')) }}
-                    @else
-                        {{ Form::model($companies, ['route' => [$companies->form_action, $companies->id], 'method' => 'PATCH', 'files' => true, 'id' => 'company-form']) }}
                     @endif
-
-                    {{ Form::hidden('id', $companies->id, ['id' => 'companies_id']) }}
+                    @if($companies->page_type == 'edit' )
+                        {{ Form::model($companies, ['route' => [$companies->form_action, $companies->id], 'method' => 'PATCH', 'files' => true, 'id' => 'company-form']) }}
+                        {{ Form::hidden('id', $companies->id, ['id' => 'companies_id']) }}
+                    @endif
                     <div id="form-name" class="form-group">
                         <div class="col-xs-12 col-sm-12 col-md-3 col-lg-2 col-header">
                             <span class="label label-danger label-required">Required</span>
@@ -166,14 +166,20 @@
                         </div>
                         <div class="col-xs-12 col-sm-12 col-md-9 col-lg-10 col-content">
                             <div class="company-image no-border">
+                                
+                                @if($companies->page_type == 'create' )
                                 <img id="company-image" style="text-align: center" src= '{{ url('/img/no-image/no-image.jpg') }}' />
+                                @endif
+                                @if($companies->page_type == 'edit' )
+                                    <img id="company-image" style="text-align: center" src= '{{ url('/img/no-image/no-image.jpg') }}' />
+                                @endif
                             </div>
                         </div>
                     </div>
 
                     <div id="form-button" class="form-group no-border">
                         <div class="col-xs-12 col-sm-12 col-md-12 text-center">
-                            <button type="submit" id="send" class="btn btn-primary">Submit</button>
+                            <button type="submit" name="submit" id="send" class="btn btn-primary">Submit</button>
                         </div>
                     </div>
                     {{ Form::close() }}
