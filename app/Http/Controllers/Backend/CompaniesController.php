@@ -25,7 +25,8 @@ class CompaniesController extends Controller
     }
 
     public function index() {
-        return view('backend.companies.index');
+        $dataXXX = $this->data_company();
+        return view('backend.companies.index', ['dataXXX' => $dataXXX]);
     }
 
     public function add()

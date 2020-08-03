@@ -38,20 +38,32 @@ $(function () {
     }; // Formatter for edit/delete 
 
     //trying to make parameter for header filter type select, not worrking, need latest version
-    function data(){
-        $.getJSON(rootUrl+'/companies_data', function(data) {
-            var len = data.length;
-            var values = [];
-            
-            for (var i = 0; i < len; i++) {
-                values.push(data[i].name);
-            }
-            console.log(values)
-            let SendX = values;
-            return SendX;
-        })
-    }
+
+    var select = $("<select></select>");
+    var selectEditor = function (cell, onRendered, success, cancel, editorParams) {
+        select.css({
+            "padding":"3px",
+            "width":"100%",
+            "box-sizing":"border-box",
+        });
     
+        //Set value of select to the current value of the cell
+        select.val(cell.getValue());
+    
+        //set focus on the select box when the select is selected (timeout allows for select to be added to DOM)
+        onRendered(function(){
+            select.focus();
+            select.css("height","100%");
+        });
+    
+        //when the value has been set, trigger the cell to update
+        select.on("change blur", function(e){
+            success(select.val());
+        });
+    
+        //return the select element
+        return select;
+    }
 
     // call tabulator function and create tables
     var table = $("#datalist").tabulator(
@@ -81,14 +93,21 @@ $(function () {
             {title: "Name", field: "name", minwidth: 200, headerFilter: "input", headerFilterPlaceholder: " "},
             {title: "Email", field: "email", width: 150, headerFilter: "input", headerFilterPlaceholder: " "},
             {title: "Postcode", field: "postcode", width: 150, headerFilter: "input", headerFilterPlaceholder: " "},
-            {title: "Prefecture", "field": "prefecture.display_name", width: 150, headerFilter:"input", headerFilterParams: data},
-            // {title: "Prefecture", "field": "prefecture.display_name", width: 150, sorter:"string", headerFilter:"select", headerFilterPlaceholder: " ", headerFilterEmptyCheck:function(value){return !value;}},
+            // {title: "Prefecture", "field": "prefecture.display_name", width: 150, headerFilter:"input", headerFilterParams: data},
+            {title: "Prefecture", "field": "prefecture.display_name", width: 150, sorter:"string", headerFilter: selectEditor, headerFilterParams: data, headerFilterPlaceholder: " "},
             {title: "Address", field: "street_address", width: 150, headerFilter: "input", headerFilterPlaceholder: " "},
             {title: "Updated At", field: "updated_at", width: 150, headerFilter: "input", headerFilterPlaceholder: " "},
             {title: "Action", field: "action", align: "center", headerFilter: false, width: 100, formatter: formatActionField, headerFilterPlaceholder: " ", headerSort: false, frozen: true}
         ],
         dataLoaded: function (data) {
             redrawTabulator();
+            console.log(data);
+            select.empty();
+            select.append("<option value=''> </option>");
+            data.forEach(function(item){
+                select.append("<option value='" + item.prefecture.display_name + "'>" + item.prefecture.display_name + "</option>");
+            });
+
         },
         columnResized: function (column) {
             // none

@@ -62,4 +62,33 @@
 <!-- Tabulator js -->
 <script type="text/javascript" src="{{ asset('js/3rdparty/tabulator.min.js') }}"></script>
 <script src="{{ asset('js/backend/companies/index.js') }}"></script>
+<script>
+
+function data(){
+        // $.getJSON(rootUrl+'/companies_data', function(data) {
+        //     var len = data.length;
+        //     var values = [];
+            
+        //     for (var i = 0; i < len; i++) {
+        //         values.push(data[i].name);
+        //     }
+        //     console.log(values)
+        //     let SendX = values;
+        //     return SendX;
+        // })
+        // let data = $dataXXX;
+        var data = {!! json_encode($dataXXX) !!};
+
+        var len = data.original.length;
+        var values = [];
+        
+        for (var i = 0; i < len; i++) {
+            values.push(data.original[i].name);
+        }
+        
+        console.log(values);
+        return values;
+}
+
+</script>
 @endsection
