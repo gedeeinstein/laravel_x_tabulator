@@ -32,36 +32,47 @@ $(function () {
         '</form>';
     }; // Formatter for edit/delete
 
+    // function paramBuilder(prefecture) {
+    //     var list = {
+    //         "": ""
+    //     };
+    //     this.getData().map(a => a[prefecture.display_name])
+    //     // var data = $('#datalist').tabulator('getData', rootUrl + '/api/admin/companies/getCompaniesTabular').map(a => a.prefecture.display_name);
 
+    //     data.forEach(function (item) {
+    //         if (typeof item !== "undefined") {
+    //             list[item] = item;
+    //         }
+    //     });
 
-    // var prefecture = new Tabulator("#example-table", {
-    //     ajaxURL:"http://www.getmydata.com/now", //ajax URL
-    //     prefecture = $('#datalist').tabulator('setData', rootUrl + '/api/admin/companies/getCompaniesTabular');
-    // });
+    //     return list;
+    // }
 
-//column definition
+    function paramBuilder(){
+        var list = {"":""};
+        var data = $('#datalist').tabulator('getData', rootUrl + '/api/admin/companies/getCompaniesTabular');
+        return data;
+      }
 
     // call tabulator function and create tables
     $("#datalist").tabulator({
-
-        
         layout: "fitColumns",
         placeholder: "There is not Data",
         responsiveLayout: false,
         resizableColumns: true,
         pagination: "local",
         paginationSize: 20,
-        langs:{
-            "ja-jp":{
-                "pagination":{
-                    "first":"<<",
-                    "first_title":"First Page",
-                    "last":">>",
-                    "last_title":"Last Page",
-                    "prev":"<",
-                    "prev_title":"Prev Page",
-                    "next":">",
-                    "next_title":"Next Page",
+        langs: {
+            "ja-jp": {
+                "pagination": {
+                    "first": "<<",
+                    "first_title": "First Page",
+                    "last": ">>",
+                    "last_title": "Last Page",
+                    "prev": "<",
+                    "prev_title": "Prev Page",
+                    "next": ">",
+                    "next_title": "Next Page",
                 },
             },
         },
@@ -70,24 +81,7 @@ $(function () {
             {title: "Name", field: "name", minwidth: 200, headerFilter: "input", headerFilterPlaceholder: " "},
             {title: "Email", field: "email", width: 150, headerFilter: "input", headerFilterPlaceholder: " "},
             {title: "Postcode", field: "postcode", width: 150, headerFilter: "input", headerFilterPlaceholder: " "},
-            {title: "Prefecture", field: "prefecture.display_name", width: 150, headerFilter: 'select',
-                editor:"autocomplete", editorParams:{
-                showListOnEmpty:true, //show all values when the list is empty,
-                freetext:true, //allow the user to set the value of the cell to a free text entry
-                allowEmpty:true, //allow empty string values
-                }
-            },
-
-            // {title:"Prefecture", field:"prefecture.name", editor:"select", headerFilter: 'select',
-            // editor:"autocomplete", headerFilterParams:{
-            //     listItemFormatter:function(value, title){
-            //         console.log(value, title);
-            //         return value
-            //     }
-            // }},
-
-            
-
+            {title: "Prefecture", field: "prefecture.display_name", width: 150, headerFilter: 'select', headerFilterParams:paramBuilder},
             {title: "Address", field: "street_address", width: 150, headerFilter: "input", headerFilterPlaceholder: " "},
             {title: "Updated At", field: "updated_at", width: 150, headerFilter: "input", headerFilterPlaceholder: " "},
             {title: "Action", field: "action", align: "center", headerFilter: false, width: 100, formatter: formatActionField, headerFilterPlaceholder: " ", headerSort: false, frozen: true}
@@ -127,7 +121,9 @@ $(function () {
     $('.sidebar-toggle').click(function() {
         redrawTabulator();
     });
+    // console.log(table[0]);
 });
+
 // switch the style of column show/hide toggle modal panel
 function switchAppearanceTabulatorColFilter() {
     var windowsize = $(window).width();
