@@ -115,12 +115,12 @@ $('#image').on('change', function(evt) {
 
 });   
 
-$('#search').click(function (e){
+$('#search').click(function (e) {
     e.preventDefault();
 
     var postcode = $('#postcode').val();
 
-    if(postcode === null || postcode == '' || postcode === 'undefined' ){
+    if (postcode === null || postcode == '' || postcode === 'undefined') {
         Swal.fire({
             position: 'center',
             icon: 'error',
@@ -128,22 +128,22 @@ $('#search').click(function (e){
             text: 'Make sure the data given is valid',
             showConfirmButton: false,
             timer: 2000
-          });
-          return false;
+        });
+        return false;
     }
 
     $.ajax({
         method: 'get',
         type: 'post',
-        url: rootUrl + '/companies/'+ postcode,
+        url: rootUrl + '/companies/' + postcode,
         dataType: 'json',
-        success: function(data){
+        success: function (data) {
             // console.info(data);
 
-            if(data != ''){
+            if (data != '') {
                 $("#local").val(data[0]['local']);
                 $("#city").val(data[0]['city']);
-                $('#prefecture_id option[value="'+data[0]['prefecture']['id']+'"]').prop('selected', true);
+                $('#prefecture_id option[value="' + data[0]['prefecture']['id'] + '"]').prop('selected', true);
 
                 Swal.fire({
                     position: 'center',
@@ -153,14 +153,14 @@ $('#search').click(function (e){
                     showConfirmButton: false,
                     timer: 1500
                 });
-            }else{
+            } else {
                 // console.log(data);
                 Swal.fire({
                     position: 'center',
                     icon: 'error',
                     title: 'Postcode Not Found',
                     text: 'Please input a valid postcode',
-                    
+
                     showConfirmButton: false,
                     timer: 1500
                 });
@@ -168,7 +168,7 @@ $('#search').click(function (e){
 
 
         },
-        error: function(data){
+        error: function (data) {
             console.log(data);
             Swal.fire({
                 position: 'center',

@@ -58,6 +58,7 @@
 @section('js-scripts')
 <!-- Jquery UI -->
 <script type="text/javascript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+<script src="{{ asset('js/3rdparty/sweet-alert/sweetalert.min.js') }}"></script>
 <!-- Tabulator js -->
 <script type="text/javascript" src="{{ asset('js/3rdparty/tabulator.min.js') }}"></script>
 <script src="{{ asset('js/backend/companies/index.js') }}"></script>

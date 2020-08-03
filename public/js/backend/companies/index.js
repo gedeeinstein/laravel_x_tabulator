@@ -1,3 +1,7 @@
+$(document).ready(function () {
+    window._token = $('meta[name="csrf-token"]').attr('content')
+});
+
 $(function () {
 
     // init: side menu for current page
@@ -24,27 +28,16 @@ $(function () {
 
     // Formatter for edit/delete
     var formatActionField = function (row, cell, formatterParams) {
-        return '<a class="btn btn-xs btn-primary" href="' + rootUrl + '/companies/edit/' + row.getData()['id'] + '" title="Edit"><i class="fa fa-edit"></i></a>&nbsp;&nbsp;' +
-        '<form id="form-delete-' + row.getData()['id'] + '" action="' + rootUrl + '/companies/delete/" method="get">' +
+        return '<form id="form-delete-' + row.getData()['id'] + '" action="' + rootUrl + '/companies/delete/" method="POST"  style="display: inline-block;">' +
+        '<a class="btn btn-xs btn-primary" href="' + rootUrl + '/companies/edit/' + row.getData()['id'] + '" title="Edit"><i class="fa fa-edit"></i></a>&nbsp;&nbsp;' +
         '<input type="hidden" name="id" value="' + row.getData()['id'] + '">' +
-        '<input type="hidden" name="delete_flag" value="1">' +
-        '<span onclick="javascript:if(confirm(\'Are you sure want to delete this Data？\')) { document.getElementById(\'form-delete-' + row.getData()['id'] + '\').submit(); } return false;" class="btn btn-xs btn-warning btn-delete" title="削除"><i class="fa fa-trash"></i></span>' +
-        '</form>';
-    }; // Formatter for edit/delete
+        '<input type="hidden" name="_method" value="DELETE">' +
+        '<input type="hidden" name="_token" value="'+ _token +'">' +
+        '<button type="submit" value="delete" name="delete" data-id="' + row.getData()['id'] + '" class="btn btn-xs btn-warning btn-delete" title="削除"><i class="fa fa-trash"></i></button>' +
+        '</form>'; 
+    }; // Formatter for edit/delete 
 
-    // let X = $.getJSON(rootUrl+'/companies_data', function(data) {
-    //     console.log(data)
-
-    //     var len = data.length;
-    //     var values = [];
-
-    //     for (var i = 0; i < len; i++) {
-    //         // var name = data[i].name;
-    //         values.push(data[i].name);
-    //     }
-    //     let SendX = values;
-    //     return SendX;
-    // })
+    //trying to make parameter for header filter type select, not worrking, need latest version
     function data(){
         $.getJSON(rootUrl+'/companies_data', function(data) {
             var len = data.length;
@@ -88,16 +81,14 @@ $(function () {
             {title: "Name", field: "name", minwidth: 200, headerFilter: "input", headerFilterPlaceholder: " "},
             {title: "Email", field: "email", width: 150, headerFilter: "input", headerFilterPlaceholder: " "},
             {title: "Postcode", field: "postcode", width: 150, headerFilter: "input", headerFilterPlaceholder: " "},
-            {title: "Prefecture", "field": "prefecture.display_name", width: 150, headerFilter:"select", headerFilterParams: data},
+            {title: "Prefecture", "field": "prefecture.display_name", width: 150, headerFilter:"input", headerFilterParams: data},
             // {title: "Prefecture", "field": "prefecture.display_name", width: 150, sorter:"string", headerFilter:"select", headerFilterPlaceholder: " ", headerFilterEmptyCheck:function(value){return !value;}},
             {title: "Address", field: "street_address", width: 150, headerFilter: "input", headerFilterPlaceholder: " "},
             {title: "Updated At", field: "updated_at", width: 150, headerFilter: "input", headerFilterPlaceholder: " "},
             {title: "Action", field: "action", align: "center", headerFilter: false, width: 100, formatter: formatActionField, headerFilterPlaceholder: " ", headerSort: false, frozen: true}
         ],
         dataLoaded: function (data) {
-            // console.log(data);
             redrawTabulator();
-            
         },
         columnResized: function (column) {
             // none
@@ -122,11 +113,11 @@ $(function () {
     });
 
     $('#datalist').tabulator('setData', rootUrl + '/api/admin/companies/getCompaniesTabular');
-    // $('#datalist').tabulator('setData', rootUrl+'/companies_data');
     $('#datalist').tabulator('setLocale', 'ja-jp');
 
     $(window).resize(function(){
        redrawTabulator();
+       
     });
 
     $('.sidebar-toggle').click(function() {
@@ -152,11 +143,12 @@ function redrawTabulator() {
     setTimeout(function() {
         $('#datalist').tabulator('redraw', true);
         
-        // PageDataInfo();
-
     }, 300);
 }
 
+function LoadData(){
+    $('#datalist').tabulator('setData', rootUrl + '/api/admin/companies/getCompaniesTabular');
+}
 function PageDataInfo(data){
     var getDataCount = $("#datalist").tabulator("getDataCount");
     var getPage      = $("#datalist").tabulator("getPage");
@@ -185,3 +177,68 @@ function PageDataInfo(data){
         $('#datalist-header').addClass('invisible');
     }
 }
+
+$('body').on('click', '.btn-delete', function (e) {
+
+    e.preventDefault();
+
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    var dataId = $(this).data('id');
+
+    Swal.fire({
+    title: 'Delete This Company',
+    text: "Are You Sure? This Action Cannot Be Undo",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Delete'
+}).
+then((result) => {
+    if (result.value) {  
+        $.ajax({
+        type: 'POST',
+        dataType: 'json',
+        url: rootUrl+ "/companies/" + dataId, //eksekusi ajax ke url ini
+        _method: "DELETE",
+        crossDomain: false,
+
+        data: {
+            _token: _token,
+            _method: 'DELETE',
+        },
+
+        success: function(data){
+            console.log(data);
+            Swal.fire({
+                icon: 'success',
+                title: 'Deleted!',
+                text: 'Company '+ data.name +' Has Been Deleted',
+                position: 'center',
+                timer: 2000
+            })
+            LoadData();
+        },
+        error: function(data){
+            console.log(data);
+
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Something went wrong! Failed to Delete '+ data.name +' Company Data' + data.responseJSON.message,
+                footer: '<b>Why do I have this issue?</b>'
+            })
+            return false;
+        }
+    })
+    }
+})
+    
+
+
+})

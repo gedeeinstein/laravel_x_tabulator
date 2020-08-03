@@ -168,14 +168,13 @@ class CompaniesController extends Controller
 
     }
 
-    public function delete(T$id)
+    public function delete($id)
     {
-        try {
-            $company = Company::where('id', $id)->delete();
-            return response()->json($company);
-        } catch (Exception $e) {
-            return $e->getMessage();
-        }
+        // $company = Company::where('id', $id);
+        $company = Company::findOrFail($id);
+        unlink(public_path() . '/uploads/files/' . $company->image);
+        $company->delete();
+        return response()->json($company);
     }
 
 
