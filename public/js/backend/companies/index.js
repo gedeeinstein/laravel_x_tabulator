@@ -32,27 +32,28 @@ $(function () {
         '</form>';
     }; // Formatter for edit/delete
 
-    // function paramBuilder(prefecture) {
-    //     var list = {
-    //         "": ""
-    //     };
-    //     this.getData().map(a => a[prefecture.display_name])
-    //     // var data = $('#datalist').tabulator('getData', rootUrl + '/api/admin/companies/getCompaniesTabular').map(a => a.prefecture.display_name);
-
-    //     data.forEach(function (item) {
-    //         if (typeof item !== "undefined") {
-    //             list[item] = item;
-    //         }
-    //     });
-
-    //     return list;
-    // }
+    function getData() {
+        var X = $("#datalist").tabulator();
+        return X;
+        console.log(x)
+    }
 
     function paramBuilder(){
         var list = {"":""};
-        var data = $('#datalist').tabulator('getData', rootUrl + '/api/admin/companies/getCompaniesTabular');
-        return data;
-      }
+        var data = getData().map(a => a.name);
+        data.forEach(function(item){
+            if(typeof item !== "undefined"){
+                list[item] = item;
+            }
+        });
+        return list;
+    }
+
+    // function paramBuilder(){
+    //     var list = {"":""};
+    //     var data = $('#datalist').tabulator('getData', rootUrl + '/api/admin/companies/getCompaniesTabular');
+    //     return data;
+    //   }
 
     // call tabulator function and create tables
     $("#datalist").tabulator({
@@ -81,13 +82,14 @@ $(function () {
             {title: "Name", field: "name", minwidth: 200, headerFilter: "input", headerFilterPlaceholder: " "},
             {title: "Email", field: "email", width: 150, headerFilter: "input", headerFilterPlaceholder: " "},
             {title: "Postcode", field: "postcode", width: 150, headerFilter: "input", headerFilterPlaceholder: " "},
-            {title: "Prefecture", field: "prefecture.display_name", width: 150, headerFilter: 'select', headerFilterParams:paramBuilder},
+            {title: "Prefecture", field: "prefecture.display_name", width: 150, headerFilter: 'select', headerFilterParams:getData},
             {title: "Address", field: "street_address", width: 150, headerFilter: "input", headerFilterPlaceholder: " "},
             {title: "Updated At", field: "updated_at", width: 150, headerFilter: "input", headerFilterPlaceholder: " "},
             {title: "Action", field: "action", align: "center", headerFilter: false, width: 100, formatter: formatActionField, headerFilterPlaceholder: " ", headerSort: false, frozen: true}
         ],
         dataLoaded: function (data) {
             redrawTabulator();
+            console.log(data);
         },
         columnResized: function (column) {
             // none
@@ -140,7 +142,8 @@ function switchAppearanceTabulatorColFilter() {
 function redrawTabulator() {
     setTimeout(function() {
         $('#datalist').tabulator('redraw', true);
-        PageDataInfo();
+        
+        // PageDataInfo();
 
     }, 300);
 }
