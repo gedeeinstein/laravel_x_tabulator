@@ -32,64 +32,72 @@ $(function () {
         '</form>';
     }; // Formatter for edit/delete
 
-    function getData() {
-        var X = $("#datalist").tabulator();
-        return X;
-        console.log(x)
-    }
+    // let X = $.getJSON(rootUrl+'/companies_data', function(data) {
+    //     console.log(data)
 
-    function paramBuilder(){
-        var list = {"":""};
-        var data = getData().map(a => a.name);
-        data.forEach(function(item){
-            if(typeof item !== "undefined"){
-                list[item] = item;
+    //     var len = data.length;
+    //     var values = [];
+
+    //     for (var i = 0; i < len; i++) {
+    //         // var name = data[i].name;
+    //         values.push(data[i].name);
+    //     }
+    //     let SendX = values;
+    //     return SendX;
+    // })
+    function data(){
+        $.getJSON(rootUrl+'/companies_data', function(data) {
+            var len = data.length;
+            var values = [];
+            
+            for (var i = 0; i < len; i++) {
+                values.push(data[i].name);
             }
-        });
-        return list;
+            console.log(values)
+            let SendX = values;
+            return SendX;
+        })
     }
-
-    // function paramBuilder(){
-    //     var list = {"":""};
-    //     var data = $('#datalist').tabulator('getData', rootUrl + '/api/admin/companies/getCompaniesTabular');
-    //     return data;
-    //   }
+    
 
     // call tabulator function and create tables
-    $("#datalist").tabulator({
-        layout: "fitColumns",
-        placeholder: "There is not Data",
-        responsiveLayout: false,
-        resizableColumns: true,
-        pagination: "local",
-        paginationSize: 20,
-        langs: {
-            "ja-jp": {
-                "pagination": {
-                    "first": "<<",
-                    "first_title": "First Page",
-                    "last": ">>",
-                    "last_title": "Last Page",
-                    "prev": "<",
-                    "prev_title": "Prev Page",
-                    "next": ">",
-                    "next_title": "Next Page",
+    var table = $("#datalist").tabulator(
+        {
+            layout: "fitColumns",
+            placeholder: "There is not Data",
+            responsiveLayout: false,
+            resizableColumns: true,
+            pagination: "local",
+            paginationSize: 20,
+            langs: {
+                "ja-jp": {
+                    "pagination": {
+                        "first": "<<",
+                        "first_title": "First Page",
+                        "last": ">>",
+                        "last_title": "Last Page",
+                        "prev": "<",
+                        "prev_title": "Prev Page",
+                        "next": ">",
+                        "next_title": "Next Page",
+                    },
                 },
             },
-        },
         columns: [
             {title: "ID", field: "id", width: 45, headerFilter: "input", sorter: "number", headerFilterPlaceholder: " "},
             {title: "Name", field: "name", minwidth: 200, headerFilter: "input", headerFilterPlaceholder: " "},
             {title: "Email", field: "email", width: 150, headerFilter: "input", headerFilterPlaceholder: " "},
             {title: "Postcode", field: "postcode", width: 150, headerFilter: "input", headerFilterPlaceholder: " "},
-            {title: "Prefecture", field: "prefecture.display_name", width: 150, headerFilter: 'select', headerFilterParams:getData},
+            {title: "Prefecture", "field": "prefecture.display_name", width: 150, headerFilter:"select", headerFilterParams: data},
+            // {title: "Prefecture", "field": "prefecture.display_name", width: 150, sorter:"string", headerFilter:"select", headerFilterPlaceholder: " ", headerFilterEmptyCheck:function(value){return !value;}},
             {title: "Address", field: "street_address", width: 150, headerFilter: "input", headerFilterPlaceholder: " "},
             {title: "Updated At", field: "updated_at", width: 150, headerFilter: "input", headerFilterPlaceholder: " "},
             {title: "Action", field: "action", align: "center", headerFilter: false, width: 100, formatter: formatActionField, headerFilterPlaceholder: " ", headerSort: false, frozen: true}
         ],
         dataLoaded: function (data) {
+            // console.log(data);
             redrawTabulator();
-            console.log(data);
+            
         },
         columnResized: function (column) {
             // none
@@ -114,6 +122,7 @@ $(function () {
     });
 
     $('#datalist').tabulator('setData', rootUrl + '/api/admin/companies/getCompaniesTabular');
+    // $('#datalist').tabulator('setData', rootUrl+'/companies_data');
     $('#datalist').tabulator('setLocale', 'ja-jp');
 
     $(window).resize(function(){

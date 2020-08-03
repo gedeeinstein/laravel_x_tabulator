@@ -196,4 +196,11 @@ class CompaniesController extends Controller
             'license_number'  => 'nullable|string',
         ]);
     }
+
+    public function data_company()
+    {
+        $companies = Company::with('prefecture')->get();
+
+        return response()->json($companies);
+    }
 }
