@@ -3,11 +3,3 @@
 Now The Contet is updated
 
 git rebase -i dd61ab32^
-
-
-
-
-
-
-aldladljaldj
-ajdlasjdl
